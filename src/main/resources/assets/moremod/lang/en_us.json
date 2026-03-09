@@ -1,0 +1,13 @@
+{
+  "itemGroup.moremod": "Example Mod Tab",
+  "block.moremod.example_block": "Example Block",
+  "item.moremod.example_item": "Example Item",
+
+  "moremod.configuration.title": "More Mod Configs",
+  "moremod.configuration.section.moremod.common.toml": "More Mod Configs",
+  "moremod.configuration.section.moremod.common.toml.title": "More Mod Configs",
+  "moremod.configuration.items": "Item List",
+  "moremod.configuration.logDirtBlock": "Log Dirt Block",
+  "moremod.configuration.magicNumberIntroduction": "Magic Number Text",
+  "moremod.configuration.magicNumber": "Magic Number"
+}

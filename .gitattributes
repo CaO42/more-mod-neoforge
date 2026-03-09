@@ -1,0 +1,8 @@
+# 让 Git 自动处理大部分代码文件（Java、构建脚本等）的换行符，抹平 Mac 和 Windows 的差异
+* text=auto
+
+# Disable autocrlf on generated files, they always generate with LF
+# Add any extra files or paths here to make git stop saying they
+# are changed when only line endings change.
+src/generated/**/.cache/cache text eol=lf
+src/generated/**/*.json text eol=lf
