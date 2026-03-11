@@ -9,9 +9,7 @@ public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MoreMod.MOD_ID);
 
     public static final DeferredItem<Item> WRENCH = ITEMS.registerItem(
-            "wrench",
-            Item::new,
-            new Item.Properties().stacksTo(1)
+            "wrench", Wrench::new
             );
 
 
