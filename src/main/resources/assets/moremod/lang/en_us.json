@@ -9,5 +9,7 @@
   "moremod.configuration.items": "Item List",
   "moremod.configuration.logDirtBlock": "Log Dirt Block",
   "moremod.configuration.magicNumberIntroduction": "Magic Number Text",
-  "moremod.configuration.magicNumber": "Magic Number"
+  "moremod.configuration.magicNumber": "Magic Number",
+
+  "item.moremod.wrench" : "Wrench"
 }
