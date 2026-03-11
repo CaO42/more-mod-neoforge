@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -119,12 +121,21 @@ public class Wrench extends Item {
                 BlockState newState = state.setValue(directionProperty, nextFacing);
                 level.setBlock(pos, newState, 3);
 
+                level.playSound(
+                        null,
+                        pos,
+                        newState.getSoundType(level, pos, null).getPlaceSound(),
+                        SoundSource.BLOCKS
+                );
+
                 stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+
+                player.displayClientMessage(Component.literal(String.format("switch the state to: %s", nextFacing.getName())), true);
             }
 
 
         }else {
-            player.displayClientMessage(Component.literal("wrench used"), false);
+            //player.displayClientMessage(Component.literal("wrench used"), false);
         }
         return InteractionResult.SUCCESS;
 
