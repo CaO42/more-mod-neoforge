@@ -11,5 +11,6 @@
   "moremod.configuration.magicNumberIntroduction": "Magic Number Text",
   "moremod.configuration.magicNumber": "Magic Number",
 
-  "item.moremod.wrench" : "扳手"
+  "item.moremod.wrench" : "扳手",
+  "item.moremod.creative_wrench": "创造模式扳手"
 }

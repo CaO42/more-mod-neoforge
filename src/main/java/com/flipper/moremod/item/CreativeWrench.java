@@ -1,6 +1,5 @@
 package com.flipper.moremod.item;
 
-import com.flipper.moremod.tags.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -9,7 +8,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -21,26 +19,16 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
-
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-public class Wrench extends Item {
-    public Wrench(Properties properties) {
+public class CreativeWrench extends Wrench{
+    public CreativeWrench(Properties properties) {
         super(properties
-                .stacksTo(1)
-                .durability(4096)
+                .durability(0)
         );
     }
-
-    /// 辅助判断是否可旋转
-    private boolean isRedstoneComponent(BlockState state) {
-        return state.is(ModTags.Blocks.WRENCHABLE);
-    }
-
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
@@ -53,10 +41,6 @@ public class Wrench extends Item {
 
             BlockPos pos = context.getClickedPos();
             BlockState state = level.getBlockState(pos);
-
-            if(!isRedstoneComponent(state)) {
-                return InteractionResult.PASS;
-            }
 
             //蹲下拆解方块
             if(player.isShiftKeyDown()) {
@@ -73,7 +57,6 @@ public class Wrench extends Item {
                         ItemHandlerHelper.giveItemToPlayer(player, drop);
                     }
 
-                    stack.hurtAndBreak(2, player, EquipmentSlot.MAINHAND);
                     return InteractionResult.SUCCESS;
                 }
 
@@ -87,9 +70,6 @@ public class Wrench extends Item {
                     .filter(p -> p instanceof DirectionProperty)
                     .findFirst()
                     .orElse(null);
-            /*StateDefinition<Block, BlockState> stateDefinition = state.getBlock().getStateDefinition();
-            Property<?> property = stateDefinition.getProperty("facing");
-            */
 
             //旋转逻辑
             if (property instanceof DirectionProperty directionProperty) {
@@ -113,8 +93,6 @@ public class Wrench extends Item {
                         SoundSource.BLOCKS
                 );
 
-                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
-
                 player.displayClientMessage(Component.literal(String.format("switch the state to: %s", nextFacing.getName())), true);
             }
 
@@ -125,4 +103,10 @@ public class Wrench extends Item {
         return InteractionResult.SUCCESS;
 
     }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return true;
+    }
+
 }
