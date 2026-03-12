@@ -1,5 +1,6 @@
 package com.flipper.moremod.item;
 
+import com.flipper.moremod.tags.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -13,14 +14,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import org.jetbrains.annotations.NotNull;
+
 
 
 import java.util.ArrayList;
@@ -36,25 +36,10 @@ public class Wrench extends Item {
         );
     }
 
-    // 红石元件白名单
-    private static final Set<String> REDSTONE_COMPONENTS = Set.of(
-            "RepeaterBlock",      // 红石中继器
-            "ComparatorBlock",   // 红石比较器
-            "HopperBlock",       // 漏斗
-            "DispenserBlock",    // 发射器
-            "DropperBlock",      // 投掷器
-            "LeverBlock",        // 拉杆
-            "ButtonBlock",       // 按钮
-            "RedstoneLampBlock", // 红石灯
-            "DaylightDetectorBlock" // 阳光传感器
-    );
-
-    private boolean isRedstoneComponent(Block block) {
-        String className = block.getClass().getSimpleName();
-        return REDSTONE_COMPONENTS.contains(className);
+    /// 辅助判断是否可旋转
+    private boolean isRedstoneComponent(BlockState state) {
+        return state.is(ModTags.Blocks.WRENCHABLE);
     }
-
-
 
 
     @Override
@@ -69,7 +54,7 @@ public class Wrench extends Item {
             BlockPos pos = context.getClickedPos();
             BlockState state = level.getBlockState(pos);
 
-            if(!isRedstoneComponent(state.getBlock())) {
+            if(!isRedstoneComponent(state)) {
                 return InteractionResult.PASS;
             }
 

@@ -1,6 +1,7 @@
 package com.flipper.moremod;
 
 import com.flipper.moremod.item.ModItems;
+import com.flipper.moremod.tags.ModTags;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -77,6 +78,8 @@ public class MoreMod {
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
+
+        ModTags.init();
 
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (MoreMod) to respond directly to events.
