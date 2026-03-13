@@ -24,7 +24,8 @@ public class ModCreativeTabs {
     );
 
     public static final Collection<DeferredHolder<Item, BlockItem>> MORE_MOD_BLOCK_ITEMS = List.of(
-            ModBlocks.CRUSHER_ITEM
+            ModBlocks.CRUSHER_ITEM,
+            ModBlocks.BLOCK_BREAKER_BASE_ITEM
     );
 
 
