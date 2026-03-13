@@ -94,13 +94,14 @@ public class CreativeWrench extends Wrench{
                 );
 
                 player.displayClientMessage(Component.literal(String.format("switch the state to: %s", nextFacing.getName())), true);
+
+                return InteractionResult.SUCCESS;
             }
 
 
-        }else {
-            //player.displayClientMessage(Component.literal("wrench used"), false);
         }
-        return InteractionResult.SUCCESS;
+
+        return InteractionResult.PASS;
 
     }
 

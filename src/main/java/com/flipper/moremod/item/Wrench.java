@@ -14,9 +14,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
@@ -26,7 +28,6 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public class Wrench extends Item {
     public Wrench(Properties properties) {
@@ -37,7 +38,7 @@ public class Wrench extends Item {
     }
 
     /// 辅助判断是否可旋转
-    private boolean isRedstoneComponent(BlockState state) {
+    private boolean isWrenchableRedstoneComponent(BlockState state) {
         return state.is(ModTags.Blocks.WRENCHABLE);
     }
 
@@ -54,9 +55,8 @@ public class Wrench extends Item {
             BlockPos pos = context.getClickedPos();
             BlockState state = level.getBlockState(pos);
 
-            if(!isRedstoneComponent(state)) {
-                return InteractionResult.PASS;
-            }
+            //不是红石元件跳过
+            if(!isWrenchableRedstoneComponent(state)) {return InteractionResult.PASS;}
 
             //蹲下拆解方块
             if(player.isShiftKeyDown()) {
@@ -81,15 +81,21 @@ public class Wrench extends Item {
             }
 
 
-            //判断有无方向
+
+            //判断有无方向状态
             StateDefinition<Block, BlockState> definition = state.getBlock().getStateDefinition();
             Property<?> property = definition.getProperties().stream()
                     .filter(p -> p instanceof DirectionProperty)
                     .findFirst()
                     .orElse(null);
-            /*StateDefinition<Block, BlockState> stateDefinition = state.getBlock().getStateDefinition();
-            Property<?> property = stateDefinition.getProperty("facing");
-            */
+
+
+            //跳过伸出活塞执行
+            if(state.is(Blocks.PISTON)) {
+                boolean isExtended = state.getValue(BlockStateProperties.EXTENDED);
+                if(isExtended) {return InteractionResult.PASS;}
+            }
+
 
             //旋转逻辑
             if (property instanceof DirectionProperty directionProperty) {
@@ -116,13 +122,14 @@ public class Wrench extends Item {
                 stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
 
                 player.displayClientMessage(Component.literal(String.format("switch the state to: %s", nextFacing.getName())), true);
+
+                return InteractionResult.SUCCESS;
             }
 
 
-        }else {
-            //player.displayClientMessage(Component.literal("wrench used"), false);
         }
-        return InteractionResult.SUCCESS;
+
+        return InteractionResult.PASS;
 
     }
 }

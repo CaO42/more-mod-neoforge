@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "moremod:block/crusher" },
+    "facing=south": { "model": "moremod:block/crusher", "y": 180 },
+    "facing=west":  { "model": "moremod:block/crusher", "y": 270 },
+    "facing=east":  { "model": "moremod:block/crusher", "y": 90 }
+  }
+}

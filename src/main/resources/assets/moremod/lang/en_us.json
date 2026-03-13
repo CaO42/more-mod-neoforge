@@ -1,5 +1,6 @@
 {
   "itemGroup.moremod": "Example Mod Tab",
+  "itemGroup.moremod.more_mod_tab": "MORE",
   "block.moremod.example_block": "Example Block",
   "item.moremod.example_item": "Example Item",
 
@@ -12,5 +13,7 @@
   "moremod.configuration.magicNumber": "Magic Number",
 
   "item.moremod.wrench" : "Wrench",
-  "item.moremod.creative_wrench" : "CreativeWrench"
+  "item.moremod.creative_wrench" : "CreativeWrench",
+
+  "blcok.moremod.crusher" : "Crusher"
 }
