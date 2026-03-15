@@ -1,5 +1,7 @@
 package com.flipper.moremod.item;
 
+import com.flipper.moremod.block.BlockBreakerBase;
+import com.flipper.moremod.block.ModBlocks;
 import com.flipper.moremod.tags.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -95,6 +97,12 @@ public class Wrench extends Item {
                 boolean isExtended = state.getValue(BlockStateProperties.EXTENDED);
                 if(isExtended) {return InteractionResult.PASS;}
             }
+            //跳过伸出的破坏器
+            if(state.is(ModBlocks.BLOCK_BREAKER_BASE.get())){
+                boolean isExtended = state.getValue(BlockBreakerBase.EXTENDED);
+                if(isExtended) {return InteractionResult.PASS;}
+            }
+
 
 
             //旋转逻辑

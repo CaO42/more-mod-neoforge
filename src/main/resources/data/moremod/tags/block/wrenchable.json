@@ -8,6 +8,7 @@
     "minecraft:dropper",
     "minecraft:observer",
     "minecraft:piston",
-    "minecraft:sticky_piston"
+    "minecraft:sticky_piston",
+    "moremod:block_breaker_base"
   ]
 }

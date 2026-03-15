@@ -2,6 +2,7 @@ package com.flipper.moremod.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -30,53 +31,71 @@ public class BlockBreakerBase extends Block {
         return  this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
+    /// 周围有方块更新时调用
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if (!level.isClientSide) {
-            Direction direction = state.getValue(FACING);
-
-            boolean flag = hasSignal(level, pos, direction);
-            boolean extended = state.getValue(EXTENDED);
-
-            if (flag && !extended) {
-                BlockPos targetPos = pos.relative(direction);
-                BlockState targetState = level.getBlockState(targetPos);
-
-                //防御性编程
-                if(targetState.is(ModBlocks.BLOCK_BREAKER_HEAD)){
-                    return;
-                }
-
-                //破坏并推出头部
-                if(canBreak(level, targetPos)) {
-
-                    state.setValue(EXTENDED, true);
-                    level.setBlock(pos, state, 3);
-
-                    level.levelEvent(2001, targetPos, Block.getId(targetState));
-                    level.destroyBlock(targetPos, true);
-
-                    BlockState newState = ModBlocks.BLOCK_BREAKER_HEAD.get().defaultBlockState()
-                            .setValue(FACING, direction);
-                    level.setBlock(targetPos, newState, 3);
-
-                }
-
-            }else if (!flag && extended) {
-                BlockPos targetPos = pos.relative(direction);
-                BlockState targetState = level.getBlockState(targetPos);
-
-                state.setValue(EXTENDED, false);
-                level.setBlock(pos, state, 3);
-
-                if(targetState.is(ModBlocks.BLOCK_BREAKER_HEAD)) {
-                    level.setBlock(targetPos, Blocks.AIR.defaultBlockState(), 3);
-                }
-
-
-            }
+            this.checkIfExtend(state, level, pos);
         }
 
+    }
+
+    //被放置时触发
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (!oldState.is(state.getBlock()) && !level.isClientSide && level.getBlockEntity(pos) == null) {
+            this.checkIfExtend(state,level, pos);
+        }
+
+    }
+
+
+    ///判断是否伸出的辅助函数，便于调用
+    private void checkIfExtend(BlockState state, Level level, BlockPos pos) {
+        Direction direction = state.getValue(FACING);
+
+        boolean flag = hasSignal(level, pos, direction);
+        boolean extended = state.getValue(EXTENDED);
+
+        if (flag && !extended) {
+            BlockPos targetPos = pos.relative(direction);
+            BlockState targetState = level.getBlockState(targetPos);
+
+            //防御性编程
+            if(targetState.is(ModBlocks.BLOCK_BREAKER_HEAD.get())){
+                return;
+            }
+
+            //破坏并推出头部
+            if(canBreak(level, targetPos)) {
+
+                BlockState newBaseState = state.setValue(EXTENDED, true);
+                level.setBlock(pos, newBaseState, 3);
+
+                if(!targetState.isAir()){
+                    level.levelEvent(2001, targetPos, Block.getId(targetState));
+                    level.destroyBlock(targetPos, true);
+                }
+
+                BlockState newHeadState = ModBlocks.BLOCK_BREAKER_HEAD.get().defaultBlockState()
+                        .setValue(FACING, direction);
+                level.setBlock(targetPos, newHeadState, 3);
+
+            }
+
+        }else if (!flag && extended) {
+            BlockPos targetPos = pos.relative(direction);
+            BlockState targetState = level.getBlockState(targetPos);
+
+
+            if(targetState.is(ModBlocks.BLOCK_BREAKER_HEAD)) {
+                level.setBlock(targetPos, Blocks.AIR.defaultBlockState(), 3);
+            }
+
+            BlockState newBaseState = state.setValue(EXTENDED, false);
+            level.setBlock(pos, newBaseState, 3);
+
+        }
     }
 
     private boolean hasSignal(Level level, BlockPos pos, Direction p_dir) {

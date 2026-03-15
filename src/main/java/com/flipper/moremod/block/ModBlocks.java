@@ -18,6 +18,7 @@ public class ModBlocks {
     public static final DeferredBlock<Block> BLOCK_BREAKER_BASE = BLOCKS.registerBlock("block_breaker_base", BlockBreakerBase::new);
     public static final DeferredItem<BlockItem> BLOCK_BREAKER_BASE_ITEM = BLOCK_ITEMS.registerSimpleBlockItem(BLOCK_BREAKER_BASE);
     public static final DeferredBlock<Block> BLOCK_BREAKER_HEAD = BLOCKS.registerBlock("block_breaker_head", BlockBreakerHead::new);
+    public static final DeferredBlock<Block> BLOCK_BREAKER_MOVING = BLOCKS.registerBlock("block_breaker_moving", BlockBreakerMoving::new);
 
 
 }
